@@ -1,0 +1,36 @@
+form {
+  padding: 12px;
+  margin-bottom: 32px;
+  ion-button {
+    margin-top: 30px;
+  }
+}
+
+p {
+  font-size: 0.8em;
+  color: #d2d2d2;
+}
+
+ion-label {
+  margin-left: 5px;
+}
+
+ion-input {
+  padding: 5px;
+}
+
+.invalid {
+  border-bottom: 1px solid #ff6153;
+}
+
+.error-message {
+  min-height: 2.2rem;
+  ion-label {
+    margin: 2px 0;
+    font-size: 60%;
+    color: #ff6153;
+  }
+  .item-inner {
+    border-bottom: 0;
+  }
+}

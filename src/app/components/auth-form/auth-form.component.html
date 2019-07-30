@@ -1,3 +1,27 @@
-<p>
-  auth-form works!
-</p>
+<form [formGroup]="authForm">
+  <ion-item>
+    <ion-label position="stacked">Email</ion-label>
+    <ion-input formControlName="email" type="email" placeholder="Your email address" [class.invalid]="!authForm.controls['email'].valid &&
+      authForm.controls['email'].touched">
+    </ion-input>
+  </ion-item>
+  <ion-item class="error-message" *ngIf="!authForm.controls['email'].valid &&
+       authForm.controls['email'].touched">
+    <ion-label>Please enter a valid email address.</ion-label>
+  </ion-item>
+
+  <ion-item *ngIf="!isPasswordResetPage">
+    <ion-label position="stacked">Password</ion-label>
+    <ion-input formControlName="password" type="password" placeholder="Your password"
+      [class.invalid]="!authForm.controls['password'].valid&& authForm.controls['password'].touched">
+    </ion-input>
+  </ion-item>
+  <ion-item class="error-message" *ngIf="!authForm.controls['password'].valid
+      && authForm.controls['password'].touched && !isPasswordResetPage">
+    <ion-label>Your password needs more than 6 characters.</ion-label>
+  </ion-item>
+
+  <ion-button (click)="submitCredentials(authForm)" expand="block" [disabled]="!authForm.valid">
+    {{ actionButtonText }}
+  </ion-button>
+</form>
