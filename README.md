@@ -27,7 +27,11 @@ It extracts the common login/signup/reset functionality into an authentication c
 
 ## Licence
 
-The starter is licenced as MIT, you can read the full [licence here](/licence).
+The starter is licenced as MIT, you can read the full [licence here](/licence.md).
+
+## Payment
+
+The template is free, but if you want to give memoney, you can do it through [this link](https://paypal.me/javebratt) and contact me if you need an invoice to mark it as a business expense.
 
 ## Usage
 
