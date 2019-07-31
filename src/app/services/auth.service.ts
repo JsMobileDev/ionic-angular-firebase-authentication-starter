@@ -6,6 +6,7 @@ import { first } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
+  public userId: string;
   constructor(private afAuth: AngularFireAuth) {}
 
   getUser(): Promise<firebase.User> {

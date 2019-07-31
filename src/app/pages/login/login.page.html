@@ -1,9 +1,17 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>login</ion-title>
+    <ion-title>Login</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <app-auth-form #loginForm (formSubmitted)=loginUser($event) [actionButtonText]="'Login'"></app-auth-form>
 
+  <ion-button expand="block" fill="clear" routerLink="/signup">
+    Create a new account
+  </ion-button>
+
+  <ion-button expand="block" fill="clear" routerLink="/reset-password">
+    I forgot my password :(
+  </ion-button>
 </ion-content>

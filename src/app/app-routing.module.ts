@@ -19,9 +19,9 @@ const routes: Routes = [
     loadChildren: './pages/signup/signup.module#SignupPageModule'
   },
   {
-    path: 'eset-password',
+    path: 'reset-password',
     loadChildren:
-      './pages/eset-password/eset-password.module#EsetPasswordPageModule'
+      './pages/reset-password/reset-password.module#EsetPasswordPageModule'
   },
   {
     path: 'profile',

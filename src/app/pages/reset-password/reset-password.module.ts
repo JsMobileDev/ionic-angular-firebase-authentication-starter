@@ -5,12 +5,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EsetPasswordPage } from './eset-password.page';
+import { ResetPasswordPage } from './reset-password.page';
+import { AuthModule } from 'src/app/shared-modules/auth.module';
 
 const routes: Routes = [
   {
     path: '',
-    component: EsetPasswordPage
+    component: ResetPasswordPage
   }
 ];
 
@@ -19,8 +20,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    AuthModule
   ],
-  declarations: [EsetPasswordPage]
+  declarations: [ResetPasswordPage]
 })
-export class EsetPasswordPageModule {}
+export class ResetPasswordPageModule {}
