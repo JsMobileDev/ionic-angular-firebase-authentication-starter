@@ -25,6 +25,10 @@ This starter templates has:
 
 It extracts the common login/signup/reset functionality into an authentication component that creates the authentication form and passes the user credentials to the parent component (_either Login, Signup, or ResetPassword_).
 
+## Licence
+
+The starter is licenced as MIT, you can read the full [licence here](/licence).
+
 ## Usage
 
 (_Bare with me here :P_) I'm working on building a tutorial in how to use it, it will live on my [main site](https://javebratt.com).
