@@ -24,14 +24,18 @@ export class AuthService {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
-  async signup(email: string, password: string): Promise<void> {
+  async signup(
+    email: string,
+    password: string
+  ): Promise<firebase.auth.UserCredential> {
     const newUserCredential: firebase.auth.UserCredential = await this.afAuth.auth.createUserWithEmailAndPassword(
       email,
       password
     );
-    return this.firestore
+    await this.firestore
       .doc(`userProfile/${newUserCredential.user.uid}`)
       .set({ email });
+    return newUserCredential;
   }
 
   resetPassword(email: string): Promise<void> {
