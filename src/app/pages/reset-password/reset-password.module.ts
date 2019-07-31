@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ResetPasswordPage } from './reset-password.page';
-import { AuthModule } from 'src/app/shared-modules/auth.module';
+import { AuthModule } from '../../shared-modules/auth.module';
 
 const routes: Routes = [
   {
