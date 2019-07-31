@@ -21,7 +21,7 @@ const routes: Routes = [
   {
     path: 'reset-password',
     loadChildren:
-      './pages/reset-password/reset-password.module#REsetPasswordPageModule'
+    './pages/reset-password/reset-password.module#ResetPasswordPageModule'
   },
   {
     path: 'profile',
