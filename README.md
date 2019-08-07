@@ -31,10 +31,10 @@ The starter is licenced as MIT, you can read the full [licence here](/licence.md
 
 ## Payment
 
-The template is free, but if you want to give memoney, you can do it through [this link](https://paypal.me/javebratt) and contact me if you need an invoice to mark it as a business expense.
+The template is free, but if you want to give me money, you can do it through [this link](https://paypal.me/javebratt). Contact me if you need an invoice to mark it as a business expense.
 
 ## Usage
 
-(_Bare with me here :P_) I'm working on building a tutorial in how to use it, it will live on my [main site](https://javebratt.com).
+(_Bear with me here :P_) I'm working on building a tutorial in how to use it, it will live on my [main site](https://javebratt.com).
 
 Have ideas on how you'd like this explained? [Shoot me an email](https://javebratt.com/contact)
