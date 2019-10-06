@@ -1,13 +1,13 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyDnlvRQ4UJl9ypzQjcQkMfIe8i9yEJ4oe0',
-    authDomain: 'firestore-event-manager.firebaseapp.com',
-    databaseURL: 'https://firestore-event-manager.firebaseio.com',
-    projectId: 'firestore-event-manager',
-    storageBucket: 'firestore-event-manager.appspot.com',
-    messagingSenderId: '823274361576',
-    appId: '1:823274361576:web:96975e3016ca2c76'
+    apiKey: 'AIzaSyCATun5z-FQAmxngFUWl0dkG2zmcn587B0',
+    authDomain: 'ionic-angular-event-manager.firebaseapp.com',
+    databaseURL: 'https://ionic-angular-event-manager.firebaseio.com',
+    projectId: 'ionic-angular-event-manager',
+    storageBucket: 'ionic-angular-event-manager.appspot.com',
+    messagingSenderId: '1055126399542',
+    appId: '1:1055126399542:web:3c36a5c070d8fd78'
   }
 };
 
