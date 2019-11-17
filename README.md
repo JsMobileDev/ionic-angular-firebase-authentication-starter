@@ -35,6 +35,6 @@ The template is free, but if you want to give me money, you can do it through [t
 
 ## Usage
 
-(_Bear with me here :P_) I'm working on building a tutorial in how to use it, it will live on my [main site](https://javebratt.com).
+I have built a tutorial that explains how to use this starter. You can find it in the [Firebase Authentication](https://courses.javebratt.com/course/authentication/intro) course on my [main course site](https://courses.javebratt.com/).
 
 Have ideas on how you'd like this explained? [Shoot me an email](https://javebratt.com/contact)
