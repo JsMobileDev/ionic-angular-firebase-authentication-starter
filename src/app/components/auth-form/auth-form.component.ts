@@ -42,8 +42,12 @@ export class AuthFormComponent implements OnInit {
   }
 
   async showLoading(): Promise<void> {
-    this.loading = await this.loadingCtrl.create();
-    await this.loading.present();
+    try {
+      this.loading = await this.loadingCtrl.create();
+      await this.loading.present();
+    } catch (error) {
+      this.handleError(error);
+    }
   }
 
   hideLoading(): Promise<boolean> {

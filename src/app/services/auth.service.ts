@@ -28,14 +28,18 @@ export class AuthService {
     email: string,
     password: string
   ): Promise<firebase.auth.UserCredential> {
-    const newUserCredential: firebase.auth.UserCredential = await this.afAuth.auth.createUserWithEmailAndPassword(
-      email,
-      password
-    );
-    await this.firestore
-      .doc(`userProfile/${newUserCredential.user.uid}`)
-      .set({ email });
-    return newUserCredential;
+    try {
+      const newUserCredential: firebase.auth.UserCredential = await this.afAuth.auth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
+      await this.firestore
+        .doc(`userProfile/${newUserCredential.user.uid}`)
+        .set({ email });
+      return newUserCredential;
+    } catch (error) {
+      throw error;
+    }
   }
 
   resetPassword(email: string): Promise<void> {
