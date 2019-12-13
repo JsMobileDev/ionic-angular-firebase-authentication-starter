@@ -53,7 +53,7 @@ export class ProfilePage implements OnInit {
         }
       ]
     });
-    await alert.present();
+    return await alert.present();
   }
 
   async updateEmail(): Promise<void> {
@@ -79,7 +79,7 @@ export class ProfilePage implements OnInit {
         }
       ]
     });
-    await alert.present();
+    return await alert.present();
   }
 
   async updatePassword(): Promise<void> {
@@ -101,6 +101,6 @@ export class ProfilePage implements OnInit {
         }
       ]
     });
-    await alert.present();
+    return await alert.present();
   }
 }
