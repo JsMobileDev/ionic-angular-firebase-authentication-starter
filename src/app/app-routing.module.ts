@@ -7,19 +7,19 @@ const routes: Routes = [
     path: 'home',
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
-  { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },
+  { path: 'login', loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule) },
   {
     path: 'signup',
-    loadChildren: './pages/signup/signup.module#SignupPageModule'
+    loadChildren: () => import('./pages/signup/signup.module').then(m => m.SignupPageModule)
   },
   {
     path: 'reset-password',
     loadChildren:
-      './pages/reset-password/reset-password.module#ResetPasswordPageModule'
+      () => import('./pages/reset-password/reset-password.module').then(m => m.ResetPasswordPageModule)
   },
   {
     path: 'profile',
-    loadChildren: './pages/profile/profile.module#ProfilePageModule'
+    loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
   }
 ];
 

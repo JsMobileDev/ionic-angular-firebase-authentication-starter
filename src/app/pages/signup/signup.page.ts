@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./signup.page.scss']
 })
 export class SignupPage implements OnInit {
-  @ViewChild(AuthFormComponent, { static: false })
+  @ViewChild(AuthFormComponent)
   signupForm: AuthFormComponent;
   constructor(private authService: AuthService, private router: Router) {}
 
