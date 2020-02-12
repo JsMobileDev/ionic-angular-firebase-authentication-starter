@@ -9,19 +9,19 @@ import { first } from 'rxjs/operators';
 export class AuthService {
   public userId: string;
   constructor(
-    private auth: AngularFireAuth,
+    private afAuth: AngularFireAuth,
     private firestore: AngularFirestore
   ) {}
 
   getUser(): Promise<firebase.User> {
-    return this.auth.authState.pipe(first()).toPromise();
+    return this.afAuth.authState.pipe(first()).toPromise();
   }
 
   login(
     email: string,
     password: string
   ): Promise<firebase.auth.UserCredential> {
-    return this.auth.signInWithEmailAndPassword(email, password);
+    return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
   async signup(
@@ -29,7 +29,7 @@ export class AuthService {
     password: string
   ): Promise<firebase.auth.UserCredential> {
     try {
-      const newUserCredential: firebase.auth.UserCredential = await this.auth.createUserWithEmailAndPassword(
+      const newUserCredential: firebase.auth.UserCredential = await this.afAuth.auth.createUserWithEmailAndPassword(
         email,
         password
       );
@@ -43,10 +43,10 @@ export class AuthService {
   }
 
   resetPassword(email: string): Promise<void> {
-    return this.auth.sendPasswordResetEmail(email);
+    return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 
   logout(): Promise<void> {
-    return this.auth.signOut();
+    return this.afAuth.auth.signOut();
   }
 }
