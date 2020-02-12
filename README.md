@@ -10,7 +10,7 @@ It's using:
 - `@angular`: "9.0.0"
 - `@angular/fire`: "5.3.0"
 - `@ionic/angular`: "5.0.0"
-- `firebase`: "^6.6.3"
+- `firebase`: "7.8.1"
 
 I'll do my best to update the `README` when I update those packages.
 
@@ -42,8 +42,8 @@ mark it as a business expense.
 
 I have built a tutorial that explains how to use this starter. You can find it
 in the
-[Firebase Authentication](https://courses.javebratt.com/course/authentication/intro)
-course on my [main course site](https://courses.javebratt.com/).
+[Firebase Authentication](https://courses.jsmobiledev.com/course/authentication/intro)
+course on my [main course site](https://courses.jsmobiledev.com/).
 
 Have ideas on how you'd like this explained?
-[Shoot me an email](https://javebratt.com/contact)
+[Shoot me an email](https://jsmobiledev.com/contact)
