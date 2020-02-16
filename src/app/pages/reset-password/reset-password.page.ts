@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./reset-password.page.scss']
 })
 export class ResetPasswordPage implements OnInit {
-  @ViewChild(AuthFormComponent, { static: false })
+  @ViewChild(AuthFormComponent)
   resetPasswordForm: AuthFormComponent;
   constructor(
     private authService: AuthService,

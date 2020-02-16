@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.page.scss']
 })
 export class LoginPage implements OnInit {
-  @ViewChild(AuthFormComponent, { static: false }) loginForm: AuthFormComponent;
+  @ViewChild(AuthFormComponent) loginForm: AuthFormComponent;
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {}

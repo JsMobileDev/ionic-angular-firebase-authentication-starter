@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-
-import { redirectUnauthorizedTo, canActivate } from '@angular/fire/auth-guard';
-
-const redirectToLogin = redirectUnauthorizedTo(['login']);
+import { AuthGuard } from './services/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -11,22 +8,30 @@ const routes: Routes = [
     path: 'home',
     loadChildren: () =>
       import('./home/home.module').then(m => m.HomePageModule),
-    ...canActivate(redirectToLogin)
+    canActivate: [AuthGuard]
   },
-  { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },
+  {
+    path: 'login',
+    loadChildren: () =>
+      import('./pages/login/login.module').then(m => m.LoginPageModule)
+  },
   {
     path: 'signup',
-    loadChildren: './pages/signup/signup.module#SignupPageModule'
+    loadChildren: () =>
+      import('./pages/signup/signup.module').then(m => m.SignupPageModule)
   },
   {
     path: 'reset-password',
-    loadChildren:
-    './pages/reset-password/reset-password.module#ResetPasswordPageModule'
+    loadChildren: () =>
+      import('./pages/reset-password/reset-password.module').then(
+        m => m.ResetPasswordPageModule
+      )
   },
   {
     path: 'profile',
-    loadChildren: './pages/profile/profile.module#ProfilePageModule',
-    ...canActivate(redirectToLogin)
+    loadChildren: () =>
+      import('./pages/profile/profile.module').then(m => m.ProfilePageModule),
+    canActivate: [AuthGuard]
   }
 ];
 
