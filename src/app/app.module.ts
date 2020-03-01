@@ -12,6 +12,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { AngularFireMessaging } from '@angular/fire/messaging/messaging';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +24,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    AngularFireMessaging,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     })

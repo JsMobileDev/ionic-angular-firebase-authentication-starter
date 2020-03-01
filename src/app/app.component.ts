@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
+import { PushNotificationsService } from './services/push-notifications.service';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,10 @@ import { SwUpdate } from '@angular/service-worker';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  constructor(private swUpdate: SwUpdate) {
+  constructor(
+    private swUpdate: SwUpdate,
+    private pushNotificationService: PushNotificationsService
+  ) {
     this.initializeApp();
   }
 
@@ -18,5 +22,7 @@ export class AppComponent {
           window.location.reload();
       });
     }
+    this.pushNotificationService.requestPermission();
+    this.pushNotificationService.receiveMessage();
   }
 }
