@@ -6,7 +6,7 @@ import {
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import { UserProfile } from '../models/user';
 
@@ -19,7 +19,7 @@ export class ProfileService {
   constructor(
     private firestore: AngularFirestore,
     private authService: AuthService
-  ) {}
+  ) { }
 
   async getUserProfile(): Promise<Observable<UserProfile>> {
     const user: firebase.User = await this.authService.getUser();

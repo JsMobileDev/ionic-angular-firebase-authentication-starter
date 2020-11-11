@@ -3,7 +3,7 @@ import { UserCredential } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { AuthFormComponent } from 'src/app/components/auth-form/auth-form.component';
 import { Router } from '@angular/router';
-
+import firebase from 'firebase/app';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.page.html',
@@ -12,9 +12,9 @@ import { Router } from '@angular/router';
 export class SignupPage implements OnInit {
   @ViewChild(AuthFormComponent)
   signupForm: AuthFormComponent;
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   async signupUser(credentials: UserCredential): Promise<void> {
     try {
