@@ -27,7 +27,7 @@ export class ProfileService {
 
   async updateName(fullName: string): Promise<void> {
     const userProfileReference = await this.getUserProfileReference();
-    return setDoc(userProfileReference, { fullName });
+    return setDoc(userProfileReference, { fullName }, { merge: true });
   }
 
   async updateEmail(newEmail: string, password: string): Promise<void> {
@@ -39,7 +39,7 @@ export class ProfileService {
       await reauthenticateWithCredential(user, credential);
       await updateEmail(user, newEmail);
       const userProfileReference = await this.getUserProfileReference();
-      return setDoc(userProfileReference, { email: newEmail });
+      return setDoc(userProfileReference, { email: newEmail }, { merge: true });
     } catch (error) {
       console.error(error);
     }

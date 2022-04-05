@@ -31,7 +31,7 @@ export class AuthService {
     try {
       const newUserCredential: UserCredential = await createUserWithEmailAndPassword(this.auth, email, password);
       const userReference = doc(this.firestore, `users/${newUserCredential.user.uid}`);
-      await setDoc(userReference, { email });
+      await setDoc(userReference, { email }, { merge: true });
       return newUserCredential.user;
     } catch (error) {
       throw error;
