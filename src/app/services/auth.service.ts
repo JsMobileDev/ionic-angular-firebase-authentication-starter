@@ -1,54 +1,48 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
+import {
+  Auth,
+  authState,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signOut,
+  User,
+  UserCredential,
+} from '@angular/fire/auth';
+import { doc, Firestore, setDoc } from '@angular/fire/firestore';
 import { first } from 'rxjs/operators';
-import 'firebase/firestore';
-import firebase from 'firebase/app';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   public userId: string;
-  constructor(
-    private afAuth: AngularFireAuth,
-    private firestore: AngularFirestore
-  ) { }
+  constructor(private auth: Auth, private firestore: Firestore) {}
 
-  getUser(): Promise<firebase.User> {
-    return this.afAuth.authState.pipe(first()).toPromise();
+  getUser(): Promise<User> {
+    return authState(this.auth).pipe(first()).toPromise();
   }
 
-  login(
-    email: string,
-    password: string
-  ): Promise<firebase.auth.UserCredential> {
-    return this.afAuth.signInWithEmailAndPassword(email, password);
+  login(email: string, password: string): Promise<UserCredential> {
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  async signup(
-    email: string,
-    password: string
-  ): Promise<firebase.auth.UserCredential> {
+  async signup(email: string, password: string): Promise<User> {
     try {
-      const newUserCredential: firebase.auth.UserCredential = await this.afAuth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-      await this.firestore
-        .doc(`userProfile/${newUserCredential.user.uid}`)
-        .set({ email });
-      return newUserCredential;
+      const newUserCredential: UserCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+      const userReference = doc(this.firestore, `userProfile/${newUserCredential.user.uid}`);
+      await setDoc(userReference, { email });
+      return newUserCredential.user;
     } catch (error) {
       throw error;
     }
   }
 
   resetPassword(email: string): Promise<void> {
-    return this.afAuth.sendPasswordResetEmail(email);
+    return sendPasswordResetEmail(this.auth, email);
   }
 
   logout(): Promise<void> {
-    return this.afAuth.signOut();
+    return signOut(this.auth);
   }
 }

@@ -35,3 +35,8 @@ UserInterfaceState.xcuserstate
 
 functions/
 dist/
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json
+.angular/

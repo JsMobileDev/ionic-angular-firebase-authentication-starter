@@ -8,7 +8,7 @@ import { UserProfile } from 'src/app/models/user';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
-  styleUrls: ['./profile.page.scss']
+  styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
   public userProfile: UserProfile;
@@ -19,12 +19,8 @@ export class ProfilePage implements OnInit {
     private alertCtrl: AlertController
   ) {}
 
-  ngOnInit() {
-    this.profileService.getUserProfile().then(profile$ => {
-      profile$.subscribe(userProfile => {
-        this.userProfile = userProfile;
-      });
-    });
+  async ngOnInit() {
+    this.userProfile = await this.profileService.getUserProfile();
   }
 
   async logOut(): Promise<void> {
@@ -40,8 +36,8 @@ export class ProfilePage implements OnInit {
           type: 'text',
           name: 'fullName',
           placeholder: 'Your full name',
-          value: this.userProfile.fullName
-        }
+          value: this.userProfile.fullName,
+        },
       ],
       buttons: [
         { text: 'Cancel' },
@@ -49,9 +45,9 @@ export class ProfilePage implements OnInit {
           text: 'Save',
           handler: data => {
             this.profileService.updateName(data.fullName);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     return await alert.present();
   }
@@ -60,7 +56,7 @@ export class ProfilePage implements OnInit {
     const alert = await this.alertCtrl.create({
       inputs: [
         { type: 'text', name: 'newEmail', placeholder: 'Your new email' },
-        { name: 'password', placeholder: 'Your password', type: 'password' }
+        { name: 'password', placeholder: 'Your password', type: 'password' },
       ],
       buttons: [
         { text: 'Cancel' },
@@ -75,9 +71,9 @@ export class ProfilePage implements OnInit {
               .catch(error => {
                 console.log('ERROR: ' + error.message);
               });
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     return await alert.present();
   }
@@ -86,20 +82,17 @@ export class ProfilePage implements OnInit {
     const alert = await this.alertCtrl.create({
       inputs: [
         { name: 'newPassword', placeholder: 'New password', type: 'password' },
-        { name: 'oldPassword', placeholder: 'Old password', type: 'password' }
+        { name: 'oldPassword', placeholder: 'Old password', type: 'password' },
       ],
       buttons: [
         { text: 'Cancel' },
         {
           text: 'Save',
           handler: data => {
-            this.profileService.updatePassword(
-              data.newPassword,
-              data.oldPassword
-            );
-          }
-        }
-      ]
+            this.profileService.updatePassword(data.newPassword, data.oldPassword);
+          },
+        },
+      ],
     });
     return await alert.present();
   }
