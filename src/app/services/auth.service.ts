@@ -30,7 +30,7 @@ export class AuthService {
   async signup(email: string, password: string): Promise<User> {
     try {
       const newUserCredential: UserCredential = await createUserWithEmailAndPassword(this.auth, email, password);
-      const userReference = doc(this.firestore, `userProfile/${newUserCredential.user.uid}`);
+      const userReference = doc(this.firestore, `users/${newUserCredential.user.uid}`);
       await setDoc(userReference, { email });
       return newUserCredential.user;
     } catch (error) {

@@ -15,7 +15,8 @@ export class ProfileService {
   async getUserProfileReference(): Promise<DocumentReference<DocumentData>> {
     const user: User = await this.authService.getUser();
     this.currentUser = user;
-    return doc(this.firestore, `userProfile/${user.uid}`);
+    console.log(user);
+    return doc(this.firestore, `users/${user.uid}`);
   }
 
   async getUserProfile(): Promise<UserProfile | null> {
