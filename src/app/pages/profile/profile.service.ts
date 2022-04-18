@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
-import { UserProfile } from '../models/user';
 import { doc, DocumentData, DocumentReference, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
 import { User, reauthenticateWithCredential, EmailAuthProvider, updateEmail, updatePassword } from '@angular/fire/auth';
+import { AuthService } from '../../services/auth.service';
+import { UserProfile } from '../../models/user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private userProfileReference: DocumentReference<DocumentData>;
   private currentUser: User;
   constructor(private firestore: Firestore, private authService: AuthService) {}
 
