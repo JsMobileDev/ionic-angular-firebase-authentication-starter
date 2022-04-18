@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { doc, DocumentData, DocumentReference, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
+import { doc, DocumentData, DocumentReference, Firestore, getDoc, setDoc, docData } from '@angular/fire/firestore';
 import { User, reauthenticateWithCredential, EmailAuthProvider, updateEmail, updatePassword } from '@angular/fire/auth';
 import { AuthService } from '../../services/auth.service';
 import { UserProfile } from '../../models/user';
+import { map, catchError, switchMap, tap, concatMap } from 'rxjs/operators';
+import { EMPTY, forkJoin, from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,48 +13,69 @@ export class ProfileService {
   private currentUser: User;
   constructor(private firestore: Firestore, private authService: AuthService) {}
 
-  async getUserProfileReference(): Promise<DocumentReference<DocumentData>> {
-    const user: User = await this.authService.getUser();
-    this.currentUser = user;
-    return doc(this.firestore, `users/${user.uid}`);
+  getUserProfileReference(): Observable<DocumentReference<DocumentData>> {
+    return this.authService.getUser().pipe(
+      map(user => {
+        this.currentUser = user;
+        return doc(this.firestore, `users/${user.uid}`);
+      }),
+      catchError(() => EMPTY)
+    );
   }
 
-  async getUserProfile(): Promise<UserProfile | null> {
-    const userProfileReference = await this.getUserProfileReference();
-    const userProfile = await getDoc(userProfileReference);
-    return userProfile.exists() ? (userProfile.data() as UserProfile) : null;
+  getUserProfile(): Observable<UserProfile> {
+    return this.getUserProfileReference().pipe(
+      switchMap(userProfileReference => {
+        return docData(userProfileReference) as Observable<UserProfile>;
+      }),
+      catchError(() => EMPTY)
+    );
   }
 
-  async updateName(fullName: string): Promise<void> {
-    const userProfileReference = await this.getUserProfileReference();
-    return setDoc(userProfileReference, { fullName }, { merge: true });
+  updateName(fullName: string): Observable<DocumentReference<DocumentData>> {
+    return this.getUserProfileReference().pipe(
+      tap({
+        next: userProfileReference => setDoc(userProfileReference, { fullName }, { merge: true }),
+        error: error => console.error(error),
+      }),
+      catchError(() => EMPTY)
+    );
   }
 
-  async updateEmail(newEmail: string, password: string): Promise<void> {
-    const userProfile = await this.getUserProfile();
-    const credential = EmailAuthProvider.credential(userProfile.email, password);
-
-    try {
-      const user = await this.authService.getUser();
-      await reauthenticateWithCredential(user, credential);
-      await updateEmail(user, newEmail);
-      const userProfileReference = await this.getUserProfileReference();
-      return setDoc(userProfileReference, { email: newEmail }, { merge: true });
-    } catch (error) {
-      console.error(error);
-    }
+  updateEmail(newEmail: string, password: string): Observable<unknown> {
+    return forkJoin([this.getUserProfile(), this.authService.getUser(), this.getUserProfileReference()]).pipe(
+      concatMap(([userProfile, user, userProfileReference]) => {
+        const credential = EmailAuthProvider.credential(userProfile.email, password);
+        return from(reauthenticateWithCredential(user, credential)).pipe(
+          tap({
+            next: () => {
+              return from(updateEmail(user, newEmail)).pipe(
+                tap({
+                  next: () => setDoc(userProfileReference, { email: newEmail }, { merge: true }),
+                  error: error => console.error(error),
+                })
+              );
+            },
+            error: error => console.error(error),
+          })
+        );
+      })
+    );
   }
 
-  async updatePassword(newPassword: string, oldPassword: string): Promise<void> {
-    const userProfile = await this.getUserProfile();
-    const credential = EmailAuthProvider.credential(userProfile.email, oldPassword);
-
-    try {
-      const user = await this.authService.getUser();
-      await reauthenticateWithCredential(user, credential);
-      return await updatePassword(user, newPassword);
-    } catch (error) {
-      console.error(error);
-    }
+  updatePassword(newPassword: string, oldPassword: string): Observable<unknown> {
+    return forkJoin([this.getUserProfile(), this.authService.getUser()]).pipe(
+      concatMap(([userProfile, user]) => {
+        const credential = EmailAuthProvider.credential(userProfile.email, oldPassword);
+        return from(reauthenticateWithCredential(user, credential)).pipe(
+          tap({
+            next: () => {
+              return from(updatePassword(user, newPassword));
+            },
+            error: error => console.error(error),
+          })
+        );
+      })
+    );
   }
 }

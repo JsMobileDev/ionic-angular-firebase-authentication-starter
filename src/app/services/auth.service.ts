@@ -10,7 +10,7 @@ import {
   UserCredential,
 } from '@angular/fire/auth';
 import { doc, Firestore, setDoc } from '@angular/fire/firestore';
-import { first } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -19,8 +19,8 @@ export class AuthService {
   public userId: string;
   constructor(private auth: Auth, private firestore: Firestore) {}
 
-  getUser(): Promise<User> {
-    return authState(this.auth).pipe(first()).toPromise();
+  getUser(): Observable<User> {
+    return authState(this.auth);
   }
 
   login(email: string, password: string): Promise<UserCredential> {

@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { UserProfile } from 'src/app/models/user';
 import { ProfileService } from './profile.service';
+import { Observable, Subscription } from 'rxjs';
+import { first, take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage implements OnInit {
-  public userProfile: UserProfile;
+export class ProfilePage implements OnDestroy {
+  public userProfile: Observable<UserProfile> = this.profileService.getUserProfile();
+  private userProfileSubscription: Subscription;
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -19,8 +22,8 @@ export class ProfilePage implements OnInit {
     private alertCtrl: AlertController
   ) {}
 
-  async ngOnInit() {
-    this.userProfile = await this.profileService.getUserProfile();
+  ngOnDestroy(): void {
+    this.userProfileSubscription?.unsubscribe();
   }
 
   async logOut(): Promise<void> {
@@ -28,28 +31,38 @@ export class ProfilePage implements OnInit {
     this.router.navigateByUrl('login');
   }
 
-  async updateName(): Promise<void> {
-    const alert = await this.alertCtrl.create({
-      subHeader: 'Your name',
-      inputs: [
-        {
-          type: 'text',
-          name: 'fullName',
-          placeholder: 'Your full name',
-          value: this.userProfile.fullName,
-        },
-      ],
-      buttons: [
-        { text: 'Cancel' },
-        {
-          text: 'Save',
-          handler: data => {
-            this.profileService.updateName(data.fullName);
+  updateName(): void {
+    this.userProfileSubscription = this.userProfile
+      .pipe(
+        first(),
+        tap({
+          next: async (userProfile: UserProfile) => {
+            const alert = await this.alertCtrl.create({
+              subHeader: 'Your name',
+              inputs: [
+                {
+                  type: 'text',
+                  name: 'fullName',
+                  placeholder: 'Your full name',
+                  value: userProfile.fullName,
+                },
+              ],
+              buttons: [
+                { text: 'Cancel' },
+                {
+                  text: 'Save',
+                  handler: data => {
+                    this.profileService.updateName(data.fullName);
+                  },
+                },
+              ],
+            });
+            return await alert.present();
           },
-        },
-      ],
-    });
-    return await alert.present();
+          error: error => console.error(error),
+        })
+      )
+      .subscribe();
   }
 
   async updateEmail(): Promise<void> {
@@ -63,14 +76,7 @@ export class ProfilePage implements OnInit {
         {
           text: 'Save',
           handler: data => {
-            this.profileService
-              .updateEmail(data.newEmail, data.password)
-              .then(() => {
-                console.log('Email Changed Successfully');
-              })
-              .catch(error => {
-                console.log('ERROR: ' + error.message);
-              });
+            this.profileService.updateEmail(data.newEmail, data.password);
           },
         },
       ],
