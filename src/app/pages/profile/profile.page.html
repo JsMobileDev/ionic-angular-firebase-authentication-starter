@@ -21,10 +21,10 @@
       <ion-grid>
         <ion-row>
           <ion-col class="text-left" size="5"> Name </ion-col>
-          <ion-col class="text-center" size="7" *ngIf="userProfile?.fullName">
-            {{userProfile?.fullName}}
+          <ion-col class="text-center" size="7" *ngIf="(userProfile | async )?.fullName">
+            {{(userProfile | async )?.fullName}}
           </ion-col>
-          <ion-col size="7" class="placeholder-profile text-center" *ngIf="!userProfile?.fullName">
+          <ion-col size="7" class="placeholder-profile text-center" *ngIf="!(userProfile | async )?.fullName">
             <span> Tap here to edit. </span>
           </ion-col>
         </ion-row>
@@ -37,10 +37,10 @@
       <ion-grid>
         <ion-row>
           <ion-col class="text-left" size="5"> Email </ion-col>
-          <ion-col class="text-center" size="7" *ngIf="userProfile?.email">
-            {{userProfile?.email}}
+          <ion-col class="text-center" size="7" *ngIf="(userProfile | async )?.email">
+            {{(userProfile | async )?.email}}
           </ion-col>
-          <ion-col size="7" class="placeholder-profile text-center" *ngIf="!userProfile?.email">
+          <ion-col size="7" class="placeholder-profile text-center" *ngIf="!(userProfile | async )?.email">
             <span> Tap here to edit. </span>
           </ion-col>
         </ion-row>
