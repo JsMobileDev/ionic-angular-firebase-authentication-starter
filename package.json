@@ -26,6 +26,7 @@
     "@capacitor/keyboard": "1.2.2",
     "@capacitor/status-bar": "1.0.8",
     "@ionic/angular": "^6.1.1",
+    "@ngrx/component-store": "^13.1.0",
     "firebase": "^9.6.11",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
