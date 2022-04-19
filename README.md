@@ -11,6 +11,7 @@ It's using:
 - `@angular/fire`: "7.3.0"
 - `@ionic/angular`: "6.0.14"
 - `firebase`: "9.6.10"
+- `@ngrx/component-store`: "^13.1.0" (_Right now it's only for the profile page_)
 
 I'll do my best to update the `README` when I update those packages.
 
