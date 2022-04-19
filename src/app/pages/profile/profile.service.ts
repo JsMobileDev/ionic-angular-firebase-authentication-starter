@@ -52,14 +52,12 @@ export class ProfileService {
         const credential = EmailAuthProvider.credential(userProfile.email, password);
         return from(reauthenticateWithCredential(user, credential)).pipe(
           tap({
-            next: () => {
-              return from(updateEmail(user, newEmail)).pipe(
-                tap({
-                  next: () => setDoc(userProfileReference, { email: newEmail }, { merge: true }),
-                  error: error => console.error(error),
-                })
-              );
-            },
+            next: () =>
+              from(
+                updateEmail(user, newEmail).then(() =>
+                  setDoc(userProfileReference, { email: newEmail }, { merge: true })
+                )
+              ),
             error: error => console.error(error),
           })
         );
