@@ -3,7 +3,7 @@ import { doc, DocumentData, DocumentReference, Firestore, getDoc, setDoc, docDat
 import { User, reauthenticateWithCredential, EmailAuthProvider, updateEmail, updatePassword } from '@angular/fire/auth';
 import { AuthService } from '../../services/auth.service';
 import { UserProfile } from '../../models/user';
-import { map, catchError, switchMap, tap, concatMap } from 'rxjs/operators';
+import { map, catchError, switchMap, tap, concatMap, first } from 'rxjs/operators';
 import { EMPTY, forkJoin, from, Observable } from 'rxjs';
 
 @Injectable({
@@ -43,19 +43,21 @@ export class ProfileService {
   }
 
   updateEmail(newEmail: string, password: string): Observable<unknown> {
-    return forkJoin([this.getUserProfile(), this.authService.getUser(), this.getUserProfileReference()]).pipe(
+    return forkJoin([
+      this.getUserProfile().pipe(first()),
+      this.authService.getUser().pipe(first()),
+      this.getUserProfileReference().pipe(first()),
+    ]).pipe(
       concatMap(([userProfile, user, userProfileReference]) => {
         const credential = EmailAuthProvider.credential(userProfile.email, password);
         return from(reauthenticateWithCredential(user, credential)).pipe(
           tap({
-            next: () => {
-              return from(updateEmail(user, newEmail)).pipe(
-                tap({
-                  next: () => setDoc(userProfileReference, { email: newEmail }, { merge: true }),
-                  error: error => console.error(error),
-                })
-              );
-            },
+            next: () =>
+              from(
+                updateEmail(user, newEmail).then(() =>
+                  setDoc(userProfileReference, { email: newEmail }, { merge: true })
+                )
+              ),
             error: error => console.error(error),
           })
         );
@@ -64,7 +66,7 @@ export class ProfileService {
   }
 
   updatePassword(newPassword: string, oldPassword: string): Observable<unknown> {
-    return forkJoin([this.getUserProfile(), this.authService.getUser()]).pipe(
+    return forkJoin([this.getUserProfile().pipe(first()), this.authService.getUser().pipe(first())]).pipe(
       concatMap(([userProfile, user]) => {
         const credential = EmailAuthProvider.credential(userProfile.email, oldPassword);
         return from(reauthenticateWithCredential(user, credential)).pipe(

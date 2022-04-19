@@ -5,22 +5,31 @@ import { AlertController } from '@ionic/angular';
 import { UserProfile } from 'src/app/models/user';
 import { ProfileService } from './profile.service';
 import { Observable, Subscription } from 'rxjs';
-import { first, take, tap } from 'rxjs/operators';
+import { first, tap } from 'rxjs/operators';
+import { ProfileStore } from './profile.store';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
+  providers: [ProfileStore],
 })
-export class ProfilePage implements OnDestroy {
-  public userProfile: Observable<UserProfile> = this.profileService.getUserProfile();
+export class ProfilePage implements OnDestroy, OnInit {
+  public userProfile$: Observable<UserProfile> = this.profileStore.userProfile$;
   private userProfileSubscription: Subscription;
   constructor(
     private authService: AuthService,
     private router: Router,
     private profileService: ProfileService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private readonly profileStore: ProfileStore
   ) {}
+
+  ngOnInit(): void {
+    this.userProfileSubscription = this.profileService
+      .getUserProfile()
+      .subscribe((userProfile: UserProfile) => this.profileStore.setState(userProfile));
+  }
 
   ngOnDestroy(): void {
     this.userProfileSubscription?.unsubscribe();
@@ -32,37 +41,29 @@ export class ProfilePage implements OnDestroy {
   }
 
   updateName(): void {
-    this.userProfileSubscription = this.userProfile
-      .pipe(
-        first(),
-        tap({
-          next: async (userProfile: UserProfile) => {
-            const alert = await this.alertCtrl.create({
-              subHeader: 'Your name',
-              inputs: [
-                {
-                  type: 'text',
-                  name: 'fullName',
-                  placeholder: 'Your full name',
-                  value: userProfile.fullName,
-                },
-              ],
-              buttons: [
-                { text: 'Cancel' },
-                {
-                  text: 'Save',
-                  handler: data => {
-                    this.profileService.updateName(data.fullName);
-                  },
-                },
-              ],
-            });
-            return await alert.present();
+    this.userProfileSubscription = this.userProfile$.pipe(first()).subscribe(async userProfile => {
+      const alert = await this.alertCtrl.create({
+        subHeader: 'Your name',
+        inputs: [
+          {
+            type: 'text',
+            name: 'fullName',
+            placeholder: 'Your full name',
+            value: userProfile.fullName,
           },
-          error: error => console.error(error),
-        })
-      )
-      .subscribe();
+        ],
+        buttons: [
+          { text: 'Cancel' },
+          {
+            text: 'Save',
+            handler: data => {
+              this.profileStore.updateUserName(data.fullName);
+            },
+          },
+        ],
+      });
+      return await alert.present();
+    });
   }
 
   async updateEmail(): Promise<void> {
@@ -76,7 +77,7 @@ export class ProfilePage implements OnDestroy {
         {
           text: 'Save',
           handler: data => {
-            this.profileService.updateEmail(data.newEmail, data.password);
+            this.profileStore.updateUserEmail({ email: data.newEmail, password: data.password });
           },
         },
       ],
@@ -95,7 +96,7 @@ export class ProfilePage implements OnDestroy {
         {
           text: 'Save',
           handler: data => {
-            this.profileService.updatePassword(data.newPassword, data.oldPassword);
+            this.profileStore.updateUserPassword({ newPassword: data.newPassword, oldPassword: data.oldPassword });
           },
         },
       ],
